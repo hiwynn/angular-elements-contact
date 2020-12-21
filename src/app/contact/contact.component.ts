@@ -1,4 +1,7 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, Input, OnInit } from '@angular/core';
+import { MatDialog } from '@angular/material/dialog';
+import { CreateGroupDialogComponent } from "./create-group-dialog/create-group-dialog.component";
+import { SelectReceiverComponent } from "./select-receiver/select-receiver.component";
 
 @Component({
   selector: 'app-contact',
@@ -7,15 +10,50 @@ import { Component, OnInit } from '@angular/core';
 })
 export class ContactComponent implements OnInit {
 
-  constructor() { }
+  @Input()
+  set contacts(contacts: { email: string }[]) {
+    console.log(contacts);
+    this._contacts = contacts;
+  }
+
+  get contacts(): { email: string }[] {
+    return this._contacts;
+  }
+
+  _contacts: { email: string }[];
+
+  constructor(public dialog: MatDialog) {
+  }
 
   ngOnInit(): void {
   }
 
-
+  onChange(value) {
+    console.log(value);
+  }
 
   showReceiver(receiver) {
     console.log(receiver);
+  }
+
+  createGroup() {
+    const dialogRef = this.dialog.open(CreateGroupDialogComponent);
+
+    dialogRef.afterClosed().subscribe(result => {
+      console.log(`Dialog result: ${result}`);
+    });
+  }
+
+  selectReceiver() {
+    const dialogRef = this.dialog.open(SelectReceiverComponent, {
+      data: {
+        contacts: this._contacts
+      }
+    });
+
+    dialogRef.afterClosed().subscribe(result => {
+      console.log(`Dialog result: ${result}`);
+    });
   }
 
 }

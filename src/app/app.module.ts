@@ -7,15 +7,25 @@ import { PopupComponent } from './popup.component';
 import { PopupService } from './popup.service';
 import { MatButtonModule } from "@angular/material/button";
 import { ContactComponent } from './contact/contact.component';
+import { MatFormFieldModule } from "@angular/material/form-field";
+import { MatIconModule } from "@angular/material/icon";
+import { MatInputModule } from "@angular/material/input";
+import { FormsModule } from "@angular/forms";
+import { MatAutocompleteModule } from "@angular/material/autocomplete";
+import { MatDialogModule } from "@angular/material/dialog";
+import { CreateGroupDialogComponent } from './contact/create-group-dialog/create-group-dialog.component';
+import { SelectReceiverComponent } from './contact/select-receiver/select-receiver.component';
+import { MatExpansionModule } from "@angular/material/expansion";
 
 // Include the `PopupService` provider,
 // but exclude `PopupComponent` from compilation,
 // because it will be added dynamically.
 
 @NgModule({
-  imports: [BrowserModule, BrowserAnimationsModule, MatButtonModule],
+  imports: [BrowserModule, BrowserAnimationsModule, FormsModule, MatFormFieldModule, MatInputModule, MatButtonModule,
+    MatIconModule, MatAutocompleteModule, MatDialogModule, MatExpansionModule],
   providers: [PopupService],
-  declarations: [AppComponent, PopupComponent, ContactComponent],
+  declarations: [AppComponent, PopupComponent, ContactComponent, CreateGroupDialogComponent, SelectReceiverComponent],
   bootstrap: [AppComponent],
   entryComponents: [PopupComponent],
 })

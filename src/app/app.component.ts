@@ -29,41 +29,41 @@ export class AppComponent implements OnInit {
 
   mockData() {
     this.contacts = [
-      {email: 'grace@gmail.com'},
-      {email: 'john@shineteachchina.com'},
-      {email: 'frank@qq.com'},
-      {email: 'tina@foxmail.com'},
-      {email: 'mike@gmail.com'},
-      {email: 'sunshine@shineteachchina.com'},
-      {email: 'jerry@gmail.com'},
-      {email: 'coco@shineteachchina.com'},
-      {email: 'alice@gmail.com'},
-      {email: 'elsa@foxmail.com'},
-      {email: 'emily@gmail.com'},
+      {id: 1, email: 'grace@gmail.com'},
+      {id: 2, email: 'john@shineteachchina.com'},
+      {id: 3, email: 'frank@qq.com'},
+      {id: 4, email: 'tina@foxmail.com'},
+      {id: 5, email: 'mike@gmail.com'},
+      {id: 6, email: 'sunshine@shineteachchina.com'},
+      {id: 7, email: 'jerry@gmail.com'},
+      {id: 8, email: 'coco@shineteachchina.com'},
+      {id: 9, email: 'alice@gmail.com'},
+      {id: 10, email: 'elsa@foxmail.com'},
+      {id: 11, email: 'emily@gmail.com'},
     ];
     this.contactGroups = [
       {
         groupName: 'colleague',
         members: [
-          {email: 'apple@gmail.com'},
-          {email: 'orange@shineteachchina.com'},
-          {email: 'banana@qq.com'},
+          {id: 12,email: 'apple@gmail.com'},
+          {id: 13,email: 'orange@shineteachchina.com'},
+          {id: 14,email: 'banana@qq.com'},
         ]
       },
       {
         groupName: 'friend',
         members: [
-          {email: 'tina@foxmail.com'},
-          {email: 'mike@gmail.com'},
+          {id: 4,email: 'tina@foxmail.com'},
+          {id: 5,email: 'mike@gmail.com'},
         ]
       },
       {
         groupName: 'family',
         members: [
-          {email: 'coco@shineteachchina.com'},
-          {email: 'alice@gmail.com'},
-          {email: 'elsa@foxmail.com'},
-          {email: 'emily@gmail.com'},
+          {id: 8,email: 'coco@shineteachchina.com'},
+          {id: 9,email: 'alice@gmail.com'},
+          {id: 10,email: 'elsa@foxmail.com'},
+          {id: 11,email: 'emily@gmail.com'},
         ]
       },
     ];
@@ -72,6 +72,7 @@ export class AppComponent implements OnInit {
 }
 
 export interface Contact {
+  id: number;
   email: string;
 }
 

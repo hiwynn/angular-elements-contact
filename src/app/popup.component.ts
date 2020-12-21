@@ -43,6 +43,7 @@ export class PopupComponent {
 
   @Input()
   set message(message: string) {
+    console.log(message);
     this._message = message;
     this.state = 'opened';
   }
