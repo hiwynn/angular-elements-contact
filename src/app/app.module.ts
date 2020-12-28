@@ -16,6 +16,7 @@ import { MatDialogModule } from "@angular/material/dialog";
 import { CreateGroupDialogComponent } from './contact/create-group-dialog/create-group-dialog.component';
 import { SelectReceiverComponent } from './contact/select-receiver/select-receiver.component';
 import { MatExpansionModule } from "@angular/material/expansion";
+import { FlexLayoutModule } from '@angular/flex-layout';
 
 // Include the `PopupService` provider,
 // but exclude `PopupComponent` from compilation,
@@ -23,7 +24,7 @@ import { MatExpansionModule } from "@angular/material/expansion";
 
 @NgModule({
   imports: [BrowserModule, BrowserAnimationsModule, FormsModule, MatFormFieldModule, MatInputModule, MatButtonModule,
-    MatIconModule, MatAutocompleteModule, MatDialogModule, MatExpansionModule],
+    MatIconModule, MatAutocompleteModule, MatDialogModule, MatExpansionModule, FlexLayoutModule],
   providers: [PopupService],
   declarations: [AppComponent, PopupComponent, ContactComponent, CreateGroupDialogComponent, SelectReceiverComponent],
   bootstrap: [AppComponent],

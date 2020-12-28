@@ -1,0 +1,102 @@
+.mat-dialog-title {
+  margin-bottom: 0;
+}
+
+.contact-receiver {
+  .contact-list {
+    .group {
+      .group-list {
+        max-height: 300px;
+        overflow-y: scroll;
+        margin-top: -10px;
+
+        mat-expansion-panel {
+          &.selected {
+            background-color: #eee;
+          }
+
+          .mat-expansion-panel-header {
+            padding: 0 15px;
+
+            .add-group-button {
+              position: absolute;
+              right: 32px;
+              height: 24px;
+            }
+
+            .group-selected-icon {
+              position: absolute;
+              right: 32px;
+              height: 24px;
+              color: green;
+
+              .clear {
+                display: none;
+              }
+
+              &:hover .done {
+                display: none;
+              }
+
+              &:hover .clear {
+                color: red;
+                display: inline-block;
+              }
+            }
+          }
+        }
+      }
+
+    }
+
+    .single {
+      .single-person-list {
+        margin-top: -10px;
+        max-height: 300px;
+        overflow-y: scroll;
+      }
+    }
+
+    ul {
+      li {
+        height: 40px;
+        padding-left: 6px;
+        padding-right: 8px;
+        border-bottom: 1px solid #ccc;
+        color: #666;
+
+        &.selected {
+          background-color: #eee;
+        }
+
+        &:first-child {
+          border-top: 1px solid #ccc;
+        }
+
+        .add-person-button {
+          cursor: pointer;
+          height: 24px;
+        }
+
+        .selected-icon {
+          cursor: pointer;
+          height: 24px;
+          color: green;
+
+          .clear {
+            display: none;
+          }
+
+          &:hover .done {
+            display: none;
+          }
+
+          &:hover .clear {
+            color: red;
+            display: inline-block;
+          }
+        }
+      }
+    }
+  }
+}

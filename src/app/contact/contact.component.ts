@@ -2,6 +2,7 @@ import { Component, Input, OnInit } from '@angular/core';
 import { MatDialog } from '@angular/material/dialog';
 import { CreateGroupDialogComponent } from "./create-group-dialog/create-group-dialog.component";
 import { SelectReceiverComponent } from "./select-receiver/select-receiver.component";
+import { Contact, ContactGroup } from "../app.component";
 
 @Component({
   selector: 'app-contact',
@@ -20,7 +21,18 @@ export class ContactComponent implements OnInit {
     return this._contacts;
   }
 
+  @Input()
+  set contactGroups(contactGroups: ContactGroup[]) {
+    console.log(contactGroups);
+    this._contactGroups = contactGroups;
+  }
+
+  get contactGroups(): ContactGroup[] {
+    return this._contactGroups;
+  }
+
   _contacts: { email: string }[];
+  _contactGroups: ContactGroup[];
 
   constructor(public dialog: MatDialog) {
   }
@@ -47,7 +59,8 @@ export class ContactComponent implements OnInit {
   selectReceiver() {
     const dialogRef = this.dialog.open(SelectReceiverComponent, {
       data: {
-        contacts: this._contacts
+        contacts: this._contacts,
+        contactGroups: this._contactGroups
       }
     });
 

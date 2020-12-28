@@ -1,0 +1,72 @@
+.mat-dialog-title {
+  margin-bottom: 15px;
+}
+
+.create-group {
+  margin-bottom: 10px;
+
+  #group-name {
+    border-bottom: 1px solid #ccc;
+    width: 200px;
+  }
+
+  .add-person-area {
+    position: relative;
+    padding-right: 30px;
+
+    .group-table {
+      margin-top: 10px;
+      border-spacing: 0;
+      border-collapse: collapse;
+      border: 1px solid #ddd;
+
+      thead {
+        tr {
+          td {
+            border-bottom-width: 2px;
+          }
+        }
+      }
+
+      tbody {
+        tr:nth-of-type(odd) {
+          background-color: #eee;
+        }
+      }
+
+      tr {
+        td {
+          border: 1px solid #ddd;
+
+          &.email-column {
+            min-width: 300px;
+          }
+        }
+
+        &.add-line {
+          input {
+            background-color: inherit;
+
+            &:focus {
+              outline: auto;
+            }
+          }
+        }
+      }
+    }
+
+    .add-line-button {
+      position: absolute;
+      right: 0;
+      bottom: 0;
+      cursor: pointer;
+    }
+
+  }
+
+
+  .add-line-button {
+    float: right;
+  }
+
+}

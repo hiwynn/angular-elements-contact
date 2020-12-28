@@ -1,0 +1,67 @@
+<h2 mat-dialog-title>选择收信人</h2>
+<hr>
+<mat-dialog-content class="mat-typography contact-receiver">
+
+  <div class="contact-list" fxLayout="row" fxLayoutGap="20px">
+    <div class="group">
+      <h3>联系人组</h3>
+      <div class="group-list">
+        <mat-accordion>
+          <mat-expansion-panel *ngFor="let group of data.contactGroups" [ngClass]="{selected : group.selected}">
+            <mat-expansion-panel-header>
+              <mat-panel-title>Group: {{group.groupName}}</mat-panel-title>
+              <mat-panel-description>
+                <div class="add-group-button" *ngIf="!group.selected" (click)="addGroup($event, group)">
+                  <mat-icon>add_circle</mat-icon>
+                </div>
+                <div class="group-selected-icon" *ngIf="group.selected" (click)="removeGroup($event, group)">
+                  <mat-icon class="done">done</mat-icon>
+                  <mat-icon class="clear">remove_circle</mat-icon>
+                </div>
+              </mat-panel-description>
+            </mat-expansion-panel-header>
+            <ul>
+              <li *ngFor="let person of group.members" [ngClass]="{selected : person.selected}" fxLayout="row"
+                  fxLayoutAlign="space-between center">
+                <span>{{person.email}}</span>
+                <div class="add-person-button" *ngIf="!person.selected" (click)="addPerson(person, group)">
+                  <mat-icon>add_circle_outline</mat-icon>
+                </div>
+                <div class="selected-icon" *ngIf="person.selected" (click)="removePerson(person, group)">
+                  <mat-icon class="done">done</mat-icon>
+                  <mat-icon class="clear">remove_circle_outline</mat-icon>
+                </div>
+              </li>
+            </ul>
+          </mat-expansion-panel>
+        </mat-accordion>
+      </div>
+    </div>
+    <div class="single">
+      <h3>联系人</h3>
+      <ul class="single-person-list">
+        <li *ngFor="let person of data.contacts" [ngClass]="{selected : person.selected}" fxLayout="row"
+            fxLayoutAlign="space-between center">
+          <span>{{person.email}}</span>
+          <div class="add-person-button" *ngIf="!person.selected" (click)="addPerson(person)">
+            <mat-icon>add_circle_outline</mat-icon>
+          </div>
+          <div class="selected-icon" *ngIf="person.selected" (click)="removePerson(person)">
+            <mat-icon class="done">done</mat-icon>
+            <mat-icon class="clear">remove_circle_outline</mat-icon>
+          </div>
+        </li>
+      </ul>
+    </div>
+  </div>
+
+  <div>
+    <h3>其他</h3>
+
+  </div>
+
+</mat-dialog-content>
+<mat-dialog-actions align="end">
+  <button mat-flat-button mat-dialog-close>取消</button>
+  <button mat-flat-button color="primary" [mat-dialog-close]="true">确定</button>
+</mat-dialog-actions>
