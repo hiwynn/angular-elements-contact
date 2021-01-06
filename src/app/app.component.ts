@@ -1,8 +1,11 @@
 import { Component, Injector, OnInit } from '@angular/core';
-import { createCustomElement } from '@angular/elements';
+import { createCustomElement, NgElement, WithProperties } from '@angular/elements';
 import { PopupService } from './popup.service';
 import { PopupComponent } from './popup.component';
 import { ContactComponent } from "./contact/contact.component";
+import { SelectReceiverComponent } from "./contact/select-receiver/select-receiver.component";
+import { ShowSelectReceiverComponent } from "./contact/show-select-receiver/show-select-receiver.component";
+import { ShowCreateGroupComponent } from "./contact/show-create-group/show-create-group.component";
 
 @Component({
   selector: 'app-root',
@@ -21,10 +24,29 @@ export class AppComponent implements OnInit {
 
     const ContactElement = createCustomElement(ContactComponent, {injector});
     customElements.define('contact-receiver', ContactElement);
+
+    const CreateGroupElement = createCustomElement(ShowCreateGroupComponent, {injector});
+    customElements.define('create-group', CreateGroupElement);
+
+    const SelectReceiverElement = createCustomElement(ShowSelectReceiverComponent, {injector});
+    customElements.define('select-receiver', SelectReceiverElement);
   }
 
   ngOnInit() {
     this.mockData();
+  }
+
+  showCreateGroupElement() {
+    const popupEl = document.createElement('create-group');
+    popupEl.addEventListener('closed', () => document.body.removeChild(popupEl));
+    document.body.appendChild(popupEl);
+  }
+
+  showSelectReceiverElement() {
+    const popupEl = document.createElement('select-receiver');
+    // popupEl.setAttribute('options': this.contactGroups);
+    popupEl.addEventListener('closed', () => document.body.removeChild(popupEl));
+    document.body.appendChild(popupEl);
   }
 
   mockData() {

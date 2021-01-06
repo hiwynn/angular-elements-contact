@@ -17,6 +17,8 @@ import { CreateGroupDialogComponent } from './contact/create-group-dialog/create
 import { SelectReceiverComponent } from './contact/select-receiver/select-receiver.component';
 import { MatExpansionModule } from "@angular/material/expansion";
 import { FlexLayoutModule } from '@angular/flex-layout';
+import { ShowSelectReceiverComponent } from './contact/show-select-receiver/show-select-receiver.component';
+import { ShowCreateGroupComponent } from './contact/show-create-group/show-create-group.component';
 
 // Include the `PopupService` provider,
 // but exclude `PopupComponent` from compilation,
@@ -26,7 +28,7 @@ import { FlexLayoutModule } from '@angular/flex-layout';
   imports: [BrowserModule, BrowserAnimationsModule, FormsModule, MatFormFieldModule, MatInputModule, MatButtonModule,
     MatIconModule, MatAutocompleteModule, MatDialogModule, MatExpansionModule, FlexLayoutModule],
   providers: [PopupService],
-  declarations: [AppComponent, PopupComponent, ContactComponent, CreateGroupDialogComponent, SelectReceiverComponent],
+  declarations: [AppComponent, PopupComponent, ContactComponent, CreateGroupDialogComponent, SelectReceiverComponent, ShowSelectReceiverComponent, ShowCreateGroupComponent],
   bootstrap: [AppComponent],
   entryComponents: [PopupComponent],
 })

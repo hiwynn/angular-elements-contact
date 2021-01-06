@@ -1,4 +1,10 @@
-<h2 mat-dialog-title>选择收信人</h2>
+<h2 mat-dialog-title fxLayout="row" fxLayoutAlign="space-between center">
+  <span>选择收信人</span>
+  <div class="search-box">
+    <input class="search-input" matInput [(ngModel)]="searchText" placeholder="搜索">
+    <mat-icon class="clear-button" *ngIf="search" aria-label="Clear" (click)="searchText=''">close</mat-icon>
+  </div>
+</h2>
 <hr>
 <mat-dialog-content class="mat-typography contact-receiver">
 
@@ -6,8 +12,8 @@
     <div class="group">
       <h3>联系人组</h3>
       <div class="group-list">
-        <mat-accordion>
-          <mat-expansion-panel *ngFor="let group of data.contactGroups" [ngClass]="{selected : group.selected}">
+        <mat-accordion *ngIf="displayPanel">
+          <mat-expansion-panel *ngFor="let group of groups" [ngClass]="{selected : group.selected}">
             <mat-expansion-panel-header>
               <mat-panel-title>Group: {{group.groupName}}</mat-panel-title>
               <mat-panel-description>
@@ -40,7 +46,7 @@
     <div class="single">
       <h3>联系人</h3>
       <ul class="single-person-list">
-        <li *ngFor="let person of data.contacts" [ngClass]="{selected : person.selected}" fxLayout="row"
+        <li *ngFor="let person of contacts" [ngClass]="{selected : person.selected}" fxLayout="row"
             fxLayoutAlign="space-between center">
           <span>{{person.email}}</span>
           <div class="add-person-button" *ngIf="!person.selected" (click)="addPerson(person)">

@@ -13,7 +13,6 @@ export class ContactComponent implements OnInit {
 
   @Input()
   set contacts(contacts: { email: string }[]) {
-    console.log(contacts);
     this._contacts = contacts;
   }
 
@@ -23,7 +22,6 @@ export class ContactComponent implements OnInit {
 
   @Input()
   set contactGroups(contactGroups: ContactGroup[]) {
-    console.log(contactGroups);
     this._contactGroups = contactGroups;
   }
 
@@ -56,17 +54,5 @@ export class ContactComponent implements OnInit {
     });
   }
 
-  selectReceiver() {
-    const dialogRef = this.dialog.open(SelectReceiverComponent, {
-      data: {
-        contacts: this._contacts,
-        contactGroups: this._contactGroups
-      }
-    });
-
-    dialogRef.afterClosed().subscribe(result => {
-      console.log(`Dialog result: ${result}`);
-    });
-  }
 
 }
