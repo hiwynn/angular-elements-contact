@@ -1,8 +1,8 @@
 <h2 mat-dialog-title fxLayout="row" fxLayoutAlign="space-between center">
   <span>选择收信人</span>
   <div class="search-box">
-    <input class="search-input" matInput [(ngModel)]="searchText" placeholder="搜索">
-    <mat-icon class="clear-button" *ngIf="search" aria-label="Clear" (click)="searchText=''">close</mat-icon>
+    <input class="search-input" matInput [(ngModel)]="searchText" (keyup)="search()" placeholder="搜索">
+    <mat-icon class="clear-button" *ngIf="search" aria-label="Clear" (click)="clearSearch()">close</mat-icon>
   </div>
 </h2>
 <hr>
@@ -12,7 +12,7 @@
     <div class="group">
       <h3>联系人组</h3>
       <div class="group-list">
-        <mat-accordion *ngIf="displayPanel">
+        <mat-accordion *ngIf="displayPanel" multi>
           <mat-expansion-panel *ngFor="let group of groups" [ngClass]="{selected : group.selected}">
             <mat-expansion-panel-header>
               <mat-panel-title>Group: {{group.groupName}}</mat-panel-title>

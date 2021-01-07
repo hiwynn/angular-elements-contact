@@ -1,7 +1,8 @@
-import { Component, OnInit, Inject, ViewChild } from '@angular/core';
-import { MAT_DIALOG_DATA, MatDialog, MatDialogRef } from '@angular/material/dialog';
-import { Contact, ContactGroup } from "../../app.component";
+import {Component, OnInit, Inject, ViewChild} from '@angular/core';
+import {MAT_DIALOG_DATA, MatDialog, MatDialogRef} from '@angular/material/dialog';
+import {Contact, ContactGroup} from "../../app.component";
 import * as _ from 'lodash';
+import {MatAccordion} from '@angular/material/expansion';
 
 @Component({
   selector: 'app-select-receiver',
@@ -9,7 +10,7 @@ import * as _ from 'lodash';
   styleUrls: ['./select-receiver.component.scss']
 })
 export class SelectReceiverComponent implements OnInit {
-
+  @ViewChild(MatAccordion) accordion: MatAccordion;
   receivers;
   selectedReceivers;
   groups: ContactGroup[];
@@ -70,8 +71,27 @@ export class SelectReceiverComponent implements OnInit {
 
   search() {
     console.log(this.searchText)
-    // this.groups = this.getSearched(this.data.contactGroups, this.searchText);
-    this.contacts = _.cloneDeep(this.data.contacts);
+    this.accordion.openAll()
+    this.groups = [];
+    this.data.contactGroups.forEach(group => {
+      console.log(group['members']);
+      const members = group['members'].filter(item => {
+        return item['email'].indexOf(this.searchText) >= 0;
+      });
+      console.log(members);
+      group['members'] = members;
+      this.groups.push(group);
+    });
+    console.log(this.groups);
+    this.contacts = this.data.contacts.filter(item => {
+      return item['email'].indexOf(this.searchText) >= 0;
+    });
+  }
+
+  clearSearch() {
+    this.accordion.closeAll();
+    this.searchText = '';
+    this.search();
   }
 
 }
