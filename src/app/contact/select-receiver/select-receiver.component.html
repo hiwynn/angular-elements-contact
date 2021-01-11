@@ -10,10 +10,14 @@
 
   <div class="contact-list" fxLayout="row" fxLayoutGap="20px">
     <div class="group">
-      <h3>联系人组</h3>
+      <h3 fxLayout="row" fxLayoutAlign="space-between center">
+        <span>联系人组</span>
+        <button mat-stroked-button class="create-button">新建联系人组</button>
+      </h3>
       <div class="group-list">
         <mat-accordion *ngIf="displayPanel" multi>
-          <mat-expansion-panel *ngFor="let group of groups" [ngClass]="{selected : group.selected}">
+          <mat-expansion-panel *ngFor="let group of groups | filterGroups : 'email': searchText"
+                               [ngClass]="{selected : group.selected}">
             <mat-expansion-panel-header>
               <mat-panel-title>Group: {{group.groupName}}</mat-panel-title>
               <mat-panel-description>
@@ -27,13 +31,13 @@
               </mat-panel-description>
             </mat-expansion-panel-header>
             <ul>
-              <li *ngFor="let person of group.members" [ngClass]="{selected : person.selected}" fxLayout="row"
-                  fxLayoutAlign="space-between center">
+              <li *ngFor="let person of group.members | filterSearch : 'email': searchText"
+                  [ngClass]="{selected : person.selected}" fxLayout="row" fxLayoutAlign="space-between center">
                 <span>{{person.email}}</span>
-                <div class="add-person-button" *ngIf="!person.selected" (click)="addPerson(person, group)">
+                <div class="add-person-button" *ngIf="!person.selected" (click)="addGroupPerson(person, group)">
                   <mat-icon>add_circle_outline</mat-icon>
                 </div>
-                <div class="selected-icon" *ngIf="person.selected" (click)="removePerson(person, group)">
+                <div class="selected-icon" *ngIf="person.selected" (click)="removeGroupPerson(person, group)">
                   <mat-icon class="done">done</mat-icon>
                   <mat-icon class="clear">remove_circle_outline</mat-icon>
                 </div>
@@ -44,10 +48,13 @@
       </div>
     </div>
     <div class="single">
-      <h3>联系人</h3>
+      <h3 fxLayout="row" fxLayoutAlign="space-between center">
+        <span>联系人</span>
+        <button mat-stroked-button class="create-button" (click)="createContact()">新建联系人</button>
+      </h3>
       <ul class="single-person-list">
-        <li *ngFor="let person of contacts" [ngClass]="{selected : person.selected}" fxLayout="row"
-            fxLayoutAlign="space-between center">
+        <li *ngFor="let person of contacts | filterSearch : 'email': searchText"
+            [ngClass]="{selected : person.selected}" fxLayout="row" fxLayoutAlign="space-between center">
           <span>{{person.email}}</span>
           <div class="add-person-button" *ngIf="!person.selected" (click)="addPerson(person)">
             <mat-icon>add_circle_outline</mat-icon>
@@ -61,13 +68,8 @@
     </div>
   </div>
 
-  <div>
-    <h3>其他</h3>
-
-  </div>
-
 </mat-dialog-content>
 <mat-dialog-actions align="end">
-  <button mat-flat-button mat-dialog-close>取消</button>
-  <button mat-flat-button color="primary" [mat-dialog-close]="true">确定</button>
+  <button mat-stroked-button mat-dialog-close>取消</button>
+  <button mat-stroked-button color="primary" [mat-dialog-close]="true">确定</button>
 </mat-dialog-actions>

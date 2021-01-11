@@ -1,0 +1,13 @@
+<h3 mat-dialog-title>{{title}}</h3>
+<hr>
+<div mat-dialog-content fxLayout="row">
+  <mat-label class="label">邮箱地址：</mat-label>
+  <div>
+    <input matInput [(ngModel)]="value" type="email">
+    <mat-error class="error-message" *ngIf="1">该联系人已存在</mat-error>
+  </div>
+</div>
+<div mat-dialog-actions align="end">
+  <button mat-stroked-button mat-dialog-close>取消</button>
+  <button mat-stroked-button [mat-dialog-close]="value">确定</button>
+</div>
