@@ -46,6 +46,11 @@
 
             mat-panel-title {
               font-weight: bold;
+
+              .group-name:hover {
+                text-shadow: 0 0 2px #aaa;
+                opacity: 0.8;
+              }
             }
 
             .add-group-button {
@@ -116,6 +121,15 @@
         .add-person-button {
           cursor: pointer;
           height: 24px;
+        }
+
+        .display-field {
+          cursor: pointer;
+
+          &:hover {
+            text-shadow: 0 0 2px #aaa;
+            opacity: 0.8;
+          }
         }
 
         .selected-icon {

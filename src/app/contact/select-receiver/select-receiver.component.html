@@ -2,7 +2,7 @@
   <span>选择收信人</span>
   <div class="search-box">
     <input class="search-input" matInput [(ngModel)]="searchText" (keyup)="search()" placeholder="搜索">
-    <mat-icon class="clear-button" *ngIf="search" aria-label="Clear" (click)="clearSearch()">close</mat-icon>
+    <mat-icon class="clear-button" aria-label="Clear" (click)="clearSearch()">close</mat-icon>
   </div>
 </h2>
 <hr>
@@ -12,32 +12,35 @@
     <div class="group">
       <h3 fxLayout="row" fxLayoutAlign="space-between center">
         <span>联系人组</span>
-        <button mat-stroked-button class="create-button">新建联系人组</button>
+        <button mat-stroked-button class="create-button" (click)="editGroup($event)">新建联系人组</button>
       </h3>
       <div class="group-list">
         <mat-accordion *ngIf="displayPanel" multi>
-          <mat-expansion-panel *ngFor="let group of groups | filterGroups : 'email': searchText"
-                               [ngClass]="{selected : group.selected}">
+          <mat-expansion-panel [ngClass]="{selected : group.selected}" *ngFor="let group of getGroups(); let i = index">
             <mat-expansion-panel-header>
-              <mat-panel-title>Group: {{group.groupName}}</mat-panel-title>
+              <mat-panel-title>
+                <span class="group-name" (click)="editGroup($event, group, i)">{{group.groupName}}</span>
+              </mat-panel-title>
               <mat-panel-description>
-                <div class="add-group-button" *ngIf="!group.selected" (click)="addGroup($event, group)">
+                <div class="add-group-button" *ngIf="!group.selected" (click)="changeGroup($event, group, true)">
                   <mat-icon>add_circle</mat-icon>
                 </div>
-                <div class="group-selected-icon" *ngIf="group.selected" (click)="removeGroup($event, group)">
+                <div class="group-selected-icon" *ngIf="group.selected" (click)="changeGroup($event, group, false)">
                   <mat-icon class="done">done</mat-icon>
                   <mat-icon class="clear">remove_circle</mat-icon>
                 </div>
               </mat-panel-description>
             </mat-expansion-panel-header>
             <ul>
-              <li *ngFor="let person of group.members | filterSearch : 'email': searchText"
+              <li *ngFor="let person of group.members | filterSearch : searchText : options.display: options.valueKey"
                   [ngClass]="{selected : person.selected}" fxLayout="row" fxLayoutAlign="space-between center">
-                <span>{{person.email}}</span>
-                <div class="add-person-button" *ngIf="!person.selected" (click)="addGroupPerson(person, group)">
+                <span matTooltip="{{person[options.valueKey]}}"
+                      [matTooltipPosition]="'after'">{{person[options.display]}}</span>
+                <div class="add-person-button" *ngIf="!person.selected"
+                     (click)="changeGroupPerson(person, group, true)">
                   <mat-icon>add_circle_outline</mat-icon>
                 </div>
-                <div class="selected-icon" *ngIf="person.selected" (click)="removeGroupPerson(person, group)">
+                <div class="selected-icon" *ngIf="person.selected" (click)="changeGroupPerson(person, group, false)">
                   <mat-icon class="done">done</mat-icon>
                   <mat-icon class="clear">remove_circle_outline</mat-icon>
                 </div>
@@ -50,16 +53,17 @@
     <div class="single">
       <h3 fxLayout="row" fxLayoutAlign="space-between center">
         <span>联系人</span>
-        <button mat-stroked-button class="create-button" (click)="createContact()">新建联系人</button>
+        <button mat-stroked-button class="create-button" (click)="editContact()">新建联系人</button>
       </h3>
       <ul class="single-person-list">
-        <li *ngFor="let person of contacts | filterSearch : 'email': searchText"
+        <li *ngFor="let person of getContacts()"
             [ngClass]="{selected : person.selected}" fxLayout="row" fxLayoutAlign="space-between center">
-          <span>{{person.email}}</span>
-          <div class="add-person-button" *ngIf="!person.selected" (click)="addPerson(person)">
+          <span class="display-field" (click)="editContact(person)" matTooltip="{{person[options.valueKey]}}"
+                [matTooltipPosition]="'after'">{{person[options.display]}}</span>
+          <div class="add-person-button" *ngIf="!person.selected" (click)="changePerson(person, true)">
             <mat-icon>add_circle_outline</mat-icon>
           </div>
-          <div class="selected-icon" *ngIf="person.selected" (click)="removePerson(person)">
+          <div class="selected-icon" *ngIf="person.selected" (click)="changePerson(person, false)">
             <mat-icon class="done">done</mat-icon>
             <mat-icon class="clear">remove_circle_outline</mat-icon>
           </div>
@@ -71,5 +75,5 @@
 </mat-dialog-content>
 <mat-dialog-actions align="end">
   <button mat-stroked-button mat-dialog-close>取消</button>
-  <button mat-stroked-button color="primary" [mat-dialog-close]="true">确定</button>
+  <button mat-stroked-button color="primary" (click)="selectionDone()">确定</button>
 </mat-dialog-actions>

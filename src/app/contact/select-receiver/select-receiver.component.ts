@@ -1,9 +1,10 @@
-import { Component, OnInit, Inject, ViewChild, Pipe, PipeTransform } from '@angular/core';
+import { Component, OnInit, Inject, ViewChild, Pipe, PipeTransform, Input } from '@angular/core';
 import { MAT_DIALOG_DATA, MatDialog, MatDialogRef } from '@angular/material/dialog';
 import { Contact, ContactGroup } from "../../app.component";
 import * as _ from 'lodash';
 import { MatAccordion } from '@angular/material/expansion';
 import { EditContactDialogComponent } from "../edit-contact-dialog/edit-contact-dialog.component";
+import { EditGroupDialogComponent } from "../edit-group-dialog/edit-group-dialog.component";
 
 @Component({
   selector: 'app-select-receiver',
@@ -15,15 +16,17 @@ export class SelectReceiverComponent implements OnInit {
   receivers;
   selectedReceivers;
   groups: ContactGroup[];
-  contacts: Contact[];
+  contacts: any[];
   displayPanel: boolean
   searchText: string;
+  options;
 
   constructor(
     public dialog: MatDialog,
     public dialogRef: MatDialogRef<SelectReceiverComponent>,
     @Inject(MAT_DIALOG_DATA) public data
   ) {
+    this.options = this.data.options;
     this.groups = _.cloneDeep(this.data.contactGroups);
     this.contacts = _.cloneDeep(this.data.contacts);
   }
@@ -37,7 +40,7 @@ export class SelectReceiverComponent implements OnInit {
   checkGroupsSelected(person) {
     this.groups.forEach(group => {
       group.members.forEach(member => {
-        if (person.id === member.id) {
+        if (person[this.options.primaryKey] === member[this.options.primaryKey]) {
           member.selected = person.selected;
         }
       });
@@ -50,55 +53,37 @@ export class SelectReceiverComponent implements OnInit {
   checkContactsSelected(persons) {
     this.contacts.forEach((item) => {
       persons.forEach(person => {
-        if (person.id === item.id) {
+        if (person[this.options.primaryKey] === item[this.options.primaryKey]) {
           item.selected = person.selected;
         }
       })
     })
   }
 
-  addPerson(person) {
-    person.selected = true;
+  changePerson(person, selected) {
+    person.selected = selected;
     this.checkGroupsSelected(person);
   }
 
-  removePerson(person) {
-    person.selected = false;
-    this.checkGroupsSelected(person);
-  }
-
-  addGroupPerson(person, group) {
-    person.selected = true;
+  changeGroupPerson(person, group, selected) {
+    person.selected = selected;
     this.checkContactsSelected([person]);
+    this.checkGroupsSelected(person);
     group.selected = group.members.every(person => {
       return person.selected;
     })
   }
 
-  removeGroupPerson(person, group) {
-    person.selected = false;
-    this.checkContactsSelected([person]);
-    group.selected = group.members.every(person => {
-      return person.selected;
-    })
-  }
-
-  addGroup(e, group) {
+  changeGroup(e, group, selected) {
     window.event ? window.event.cancelBubble = true : e.stopPropagation();
-    group.selected = true;
+    group.selected = selected;
     group.members.forEach(person => {
-      person.selected = true;
+      person.selected = selected;
     })
     this.checkContactsSelected(group.members);
-  }
-
-  removeGroup(e, group) {
-    window.event ? window.event.cancelBubble = true : e.stopPropagation();
-    group.selected = false;
     group.members.forEach(person => {
-      person.selected = false;
+      this.checkGroupsSelected(person);
     })
-    this.checkContactsSelected(group.members);
   }
 
   search() {
@@ -109,39 +94,86 @@ export class SelectReceiverComponent implements OnInit {
     this.searchText = '';
   }
 
-  createContact() {
-    const dialogRef = this.dialog.open(EditContactDialogComponent, {
-      data: {
-        contact: null,
-        contacts: this.contacts
-      }
-    });
-
-    dialogRef.afterClosed().subscribe(result => {
-      console.log(result);
+  getContacts() {
+    const searchText = this.searchText ? this.searchText.toLowerCase() : '';
+    return this.contacts.filter(item => {
+      return item[this.options.display].toLowerCase().indexOf(searchText) != - 1
+        || item[this.options.valueKey].toLowerCase().indexOf(searchText) != - 1
     });
   }
 
-}
-
-@Pipe({name: 'filterSearch'})
-export class FilterSearchPipe implements PipeTransform {
-  transform(items: Contact[], field: string, searchText: string): any {
-    searchText = searchText ? searchText.toLowerCase() : '';
-    return items.filter(item => item[field].toLowerCase().indexOf(searchText) != - 1);
-  }
-}
-
-@Pipe({name: 'filterGroups'})
-export class FilterGroupPipe implements PipeTransform {
-  transform(items: ContactGroup[], field: string, searchText: string): any {
-    searchText = searchText ? searchText.toLowerCase() : '';
+  getGroups() {
+    const searchText = this.searchText ? this.searchText.toLowerCase() : '';
     const newGroups = [];
-    items.forEach(item => {
-      if (item['members'].filter(member => member[field].toLowerCase().indexOf(searchText) != - 1).length) {
+    this.groups.forEach(item => {
+      if (item['members'].filter(member => {
+        return member[this.options.display].toLowerCase().indexOf(searchText) != - 1
+          || member[this.options.valueKey].toLowerCase().indexOf(searchText) != - 1
+      }).length || item['groupName'].toLowerCase().indexOf(searchText) != - 1) {
         newGroups.push(item);
       }
     })
     return newGroups;
+  }
+
+  editContact(person?) {
+    const dialogRef = this.dialog.open(EditContactDialogComponent, {
+      data: {
+        contact: person ? person : null,
+        contacts: this.contacts,
+        groups: this.groups,
+        options: this.options
+      }
+    });
+
+    dialogRef.afterClosed().subscribe(result => {
+      if (result) {
+        if (result.primaryKey !== null) {
+          person[this.options.display] = result.name;
+          person[this.options.valueKey] = result.value;
+        } else {
+          const newPerson = {}
+          newPerson[this.options.primaryKey] = new Date().getTime();
+          newPerson[this.options.display] = result.name;
+          newPerson[this.options.valueKey] = result.value;
+          this.contacts.push(newPerson);
+        }
+      }
+    });
+  }
+
+  editGroup(e, group?, index?) {
+    let selectedGroup;
+    if (group) {
+      selectedGroup = _.cloneDeep(group);
+      selectedGroup.index = index;
+    }
+    window.event ? window.event.cancelBubble = true : e.stopPropagation();
+    const dialogRef = this.dialog.open(EditGroupDialogComponent, {
+      data: {
+        group: group ? selectedGroup : null,
+        contacts: this.contacts,
+        groups: this.groups,
+        options: this.options
+      }
+    });
+
+    dialogRef.afterClosed().subscribe(result => {
+      if (result) {
+        if (group) { // Edit Group
+          group = result;
+          _.fill(this.groups, result, index, index + 1);
+        } else { // Create Group
+          this.groups.push(result);
+        }
+      }
+    });
+  }
+
+  selectionDone() {
+    const selectedContacts = this.contacts.filter(item => {
+      return item.selected;
+    });
+    this.dialogRef.close(selectedContacts);
   }
 }

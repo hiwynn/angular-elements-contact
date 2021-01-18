@@ -1,0 +1,48 @@
+<h3 mat-dialog-title fxLayout="row" fxLayoutAlign="space-between center">
+  <span>联系人组</span>
+  <div class="search-box">
+    <input class="search-input" matInput [(ngModel)]="searchText" (keyup)="searchChange(searchText)" placeholder="搜索">
+    <mat-icon class="clear-button" aria-label="Clear" (click)="clearSearch()">close</mat-icon>
+  </div>
+</h3>
+<hr>
+<div mat-dialog-content>
+  <div fxLayout="row" fxLayoutGap="30px">
+    <div class="group-members">
+      <div fxLayout="row" class="group-name">
+        <mat-label class="label">组名称：</mat-label>
+        <input matInput [(ngModel)]="currentGroup.groupName">
+        <span class="error-message">已存在</span>
+      </div>
+      <div class="members" fxLayout="row">
+        <mat-label class="label">组成员：</mat-label>
+        <ul>
+          <li *ngFor="let person of currentGroup.members; trackBy: trackByFn"
+              fxLayout="row" fxLayoutAlign="space-between center">
+            <span class="display-content" matTooltip="{{person[options.valueKey]}}"
+                  [matTooltipPosition]="'after'">{{person[options.display]}}</span>
+            <mat-icon class="remove-from-group" (click)="removeFromGroup(person)">remove_circle_outline</mat-icon>
+          </li>
+        </ul>
+      </div>
+    </div>
+    <div class="contact-list">
+      <mat-label class="label">选择联系人：</mat-label>
+      <ul>
+        <li *ngFor="let person of contacts | filterSearch : searchText : options.display : options.valueKey"
+            [ngClass]="{exist : person.exist}" fxLayout="row" fxLayoutAlign="space-between center">
+          <mat-checkbox class="selected-in-group" [(ngModel)]="person.exist" (change)="changePersonInList(person)">
+            <span class="display-content" matTooltip="{{person[options.valueKey]}}"
+                  [matTooltipPosition]="'after'">{{person[options.display]}}</span>
+          </mat-checkbox>
+        </li>
+      </ul>
+    </div>
+  </div>
+</div>
+<div mat-dialog-actions>
+  <button mat-stroked-button (click)="delete()" *ngIf="data.group">删除联系人</button>
+  <span fxFlex></span>
+  <button mat-stroked-button mat-dialog-close>取消</button>
+  <button mat-stroked-button (click)="done()">确定</button>
+</div>

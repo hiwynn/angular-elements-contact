@@ -1,4 +1,4 @@
-import { Component, EventEmitter, OnInit, Output } from '@angular/core';
+import { Component, EventEmitter, Input, OnInit, Output } from '@angular/core';
 import { SelectReceiverComponent } from "../select-receiver/select-receiver.component";
 import { MatDialog } from "@angular/material/dialog";
 import { AppComponent } from "../../app.component";
@@ -11,8 +11,11 @@ import { AppComponent } from "../../app.component";
 export class ShowSelectReceiverComponent implements OnInit {
 
   @Output() closed = new EventEmitter();
+  @Input() options;
+  @Input() contacts;
+  @Input() groups;
 
-  constructor(public dialog: MatDialog, private appComponent: AppComponent) {
+  constructor(public dialog: MatDialog) {
   }
 
   ngOnInit(): void {
@@ -22,14 +25,14 @@ export class ShowSelectReceiverComponent implements OnInit {
   selectReceiver() {
     const dialogRef = this.dialog.open(SelectReceiverComponent, {
       data: {
-        contacts: this.appComponent.contacts,
-        contactGroups: this.appComponent.contactGroups
+        options: JSON.parse(this.options),
+        contacts: JSON.parse(this.contacts),
+        contactGroups: JSON.parse(this.groups)
       }
     });
 
     dialogRef.afterClosed().subscribe(result => {
-      console.log(`Dialog result: ${result}`);
-      this.closed.next();
+      this.closed.next(result);
     });
   }
 
